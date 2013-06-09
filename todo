@@ -1,0 +1,14 @@
+TODO LIST:
+
+(priority number / task)
+
+1 New instances (Add new rows)
+1 Metadata editing (Modifying columns and tabs)
+2 Browser history & routing (Back and forward buttons)
+3 oAuth servlet (Social login)
+3 Autosuggestion (Search box)
+3 Better input forms
+4 Range selections (Select multiple cells)
+4 Magic properties (Equations, Sum, Count etc.)
+5 Integrate visualizations (Bar, Pie, etc.)
+
