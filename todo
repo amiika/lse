@@ -3,9 +3,11 @@ TODO LIST:
 (priority number / task)
 
 1 New instances (Add new rows)
-1 Metadata editing (Modifying columns and tabs)
+1 Ordering/sorting (Order rows by columns)
+1 Metadata editing (Modifying columns and tabs, ordering etc.)
 2 Browser history & routing (Back and forward buttons)
 3 oAuth servlet (Social login)
+3 Login page, User page etc.
 3 Autosuggestion (Search box)
 3 Better input forms
 4 Range selections (Select multiple cells)
