@@ -57,6 +57,11 @@
 			padding-top: 50px;
 		}
 		
+		.id {
+			width: 20px;
+			font-size: 80%;
+		}
+		
 	html, body { margin: 0; padding: 0; padding-top: 0px; }
 		
 		.nav-tabs > .active > a, .nav-tabs > .active > a:hover { 
@@ -84,12 +89,16 @@ outline: 0;
 			</tr>-->
 			<thead>
 				<tr>
-					<th class="text-center" ng-repeat="property in oProperties" ng-cloak>{{title(property.localName)}}</th>
+					<th></th>
+					<!--<th>Type</th> -->
+					<th class="text-center" ng-repeat="property in properties" ng-cloak>{{title(property.value.localName)}}</th>
 				</tr>
 			</thead>
 			<tr ng-repeat="(id,s) in subjects">
-				<td ng-repeat="p in oProperties">
-					<p class="cellItem" ng-repeat="triple in p.objects[id]" ng-click="addNew(p.objects[id])">
+				<td class="id"><b>{{$index+1}}</b></td>
+				<!--<td class="type"><p class="cellItem" ng-repeat="type in s.type">{{type.localName}}</p></td> -->
+				<td ng-repeat="p in properties">
+					<p class="cellItem" ng-repeat="triple in p.value.objects[id]" ng-click="addNew(p.value.objects[id])">
 							<span ng-switch on="triple.o.type">
 								<a ng-model="triple.o.value" ng-switch-when="uri" ng-click="followLink(triple)" ng-cloak>{{title(triple.o.value)}}</a>
 								<span ng-model="triple.o.value" ng-switch-default ng-click="openDialog(triple)" ng-cloak>{{triple.o.value}}</span>

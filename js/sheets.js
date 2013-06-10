@@ -25,7 +25,7 @@ function DialogController($scope, dialog, triple){
 }
 
 function sheetCtrl($scope, $compile, $dialog, SparqlService, PrefixService, SparqlUpdateService) {
-	$scope.endpoint = "http://localhost:3030/ik/sparql"
+	$scope.endpoint = "http://localhost:3030/ik/sparql";
 	$scope.endpointUpdate = "http://localhost:3030/ik/update";
 	$scope.limit = 100;
 	$scope.offset = 0;
@@ -39,7 +39,7 @@ function sheetCtrl($scope, $compile, $dialog, SparqlService, PrefixService, Spar
 	$scope.columns = [];
 	$scope.rows = [];
 	$scope.subjects = undefined;
-	$scope.classes = [];
+	$scope.classes = {};
 	$scope.metaClasses = [];
 	$scope.selectedClass = undefined;
 	$scope.orderBy = undefined;
@@ -47,6 +47,8 @@ function sheetCtrl($scope, $compile, $dialog, SparqlService, PrefixService, Spar
 	$scope.settingProperties = [];
 	$scope.objects = {};
 	$scope.titles = {};
+	
+	$scope.properties = undefined;
 	
 	$scope.opts = {
     backdrop: true,
@@ -129,6 +131,15 @@ function sheetCtrl($scope, $compile, $dialog, SparqlService, PrefixService, Spar
     $scope.addNew = function(a) {
     	console.log(a);
     }
+    /*
+    $scope.$watch('oProperties',function(newP,oldP) {
+    	if(prop!==undefined && !_.isEmpty(prop)) {
+    		// _.size(
+    		console.log("test");
+	    	$scope.properties = _.map(oProperties, function(vValue, vKey) {
+	        return { key:vKey, value:vValue };
+	    }); }
+    });*/
 	
 	$scope.$watch('endpoint',function(e) {
 		getClasses("default");	
@@ -267,7 +278,8 @@ function sheetCtrl($scope, $compile, $dialog, SparqlService, PrefixService, Spar
                  	if(resolved.namespace=="http://www.w3.org/2002/07/owl#" || resolved.namespace=="http://www.w3.org/2000/01/rdf-schema#")	
                     	$scope.metaClasses.push(resolved);
                     else
-                    	$scope.classes.push(resolved);
+                        $scope.classes[resolved.id] = resolved;
+                    	// $scope.classes.push(resolved);
                  }
              }
          });  
@@ -288,10 +300,13 @@ function sheetCtrl($scope, $compile, $dialog, SparqlService, PrefixService, Spar
                  console.log("Pushing items")
                  for(item in data) {
                  	   	
+
+                 	if($scope.oProperties[data[item].p.value]===undefined) {
+                 		
                  	if(data[item].p.value=="http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
                  		//FIXME: Store all properties to classes object !?!?
                  	}
-                 	else if($scope.oProperties[data[item].p.value]===undefined) {
+                 		
                  		resolved = PrefixService.resolve(data[item].p.value);
                  		resolved.objects = {};
                  		$scope.oProperties[data[item].p.value] = resolved;
@@ -317,11 +332,14 @@ function sheetCtrl($scope, $compile, $dialog, SparqlService, PrefixService, Spar
                 		else data[item].o = $scope.objects[data[item].o.value];
                 	} 
                 	
-                	
+
+                	if($scope.oProperties[data[item].p.value].objects[data[item].s.value] === undefined) {
+                		
+                		                	
                 	if(data[item].p.value=="http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
-                		$scope.subjects[data[item].s.value].type.push(data[item].o.value);
+                		$scope.subjects[data[item].s.value].type.push($scope.classes[data[item].o.value]);
+                		//$scope.subjects[data[item].s.value].type.push(data[item].o.value);
                 	}
-                	else if($scope.oProperties[data[item].p.value].objects[data[item].s.value] === undefined) {
                 		
                 		if(data[item].p.value=="http://xmlns.com/foaf/0.1/name") {
                 			$scope.subjects[data[item].s.value].label = data[item].o.value;
@@ -350,9 +368,14 @@ function sheetCtrl($scope, $compile, $dialog, SparqlService, PrefixService, Spar
              	$scope.all = true;
              }
              
+             $scope.properties = _.map($scope.oProperties, function(vValue, vKey) {
+	       		 return { key:vKey, value:vValue };
+	    	});
+	    	
              
              console.log("oProperties");
              console.log($scope.oProperties);
+             console.log($scope.properties);
              console.log("subjects:")
              console.log($scope.subjects);
              $scope.busy = false;
