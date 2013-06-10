@@ -354,13 +354,12 @@ function sheetCtrl($scope, $compile, $dialog, SparqlService, PrefixService, Spar
                 	
                  }
 			
-			 // Get titles for all of the objects
-			 // FIXME: What if title is always undefined !?
-			 
-             for(ae in $scope.objects) {
-             	if($scope.titles[$scope.objects[ae].value]===undefined)
-           	  	getTitles("default",$scope.objects[ae].value);	
-             }
+				 // Get titles for all of the objects
+				 // FIXME: SLOW! What if title is always undefined !?!?
+	             for(ae in $scope.objects) {
+	             	if($scope.titles[$scope.objects[ae].value]===undefined)
+	           	  	getTitles("default",$scope.objects[ae].value);	
+	             }
              
              
              } else {
@@ -368,9 +367,14 @@ function sheetCtrl($scope, $compile, $dialog, SparqlService, PrefixService, Spar
              	$scope.all = true;
              }
              
-             $scope.properties = _.map($scope.oProperties, function(vValue, vKey) {
+             
+             // FIXME: This is ugly hack and way too slow!!!
+             // Better to resolve correct column when it is first queried 
+             // OR use propertyOrder array !!!
+             
+            /* $scope.properties = _.map($scope.oProperties, function(vValue, vKey) {
 	       		 return { key:vKey, value:vValue };
-	    	});
+	    	});*/
 	    	
              
              console.log("oProperties");
